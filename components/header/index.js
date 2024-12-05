@@ -1,3 +1,10 @@
-export default function Header() {
-    return <div>Header</div>
+import { withAuth } from "../with-auth";
+
+function Header() {
+    return (
+        <div>
+            <Menu />
+        </div>
+    );
 }
+export default withAuth(Header);
