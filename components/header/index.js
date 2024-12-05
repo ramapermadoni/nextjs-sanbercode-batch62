@@ -1,10 +1,8 @@
-import { withAuth } from "../with-auth";
-
-function Header() {
+import styles from "./styles.module.css";
+export default function Header() {
     return (
-        <div>
-            <Menu />
+        <div className={styles.header}>
+            Header
         </div>
     );
 }
-export default withAuth(Header);
