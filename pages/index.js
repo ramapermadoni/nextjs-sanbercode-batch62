@@ -25,8 +25,8 @@ export default function Main() {
         <Image src="/nextjs.png" alt="Next.js Logo" height={200} width={200} />
 
 
-        <img
-          src="/nextjs.png" style={{ width: "200px" }} alt="Next.js Logo" />
+        {/* <img
+          src="/nextjs.png" style={{ width: "200px" }} alt="Next.js Logo" /> */}
       </LayoutDynamic>
     </>
   );
