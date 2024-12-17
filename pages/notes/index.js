@@ -1,32 +1,80 @@
 import dynamic from "next/dynamic";
-import styles from "./styles.module.css";
-import Link from "next/link";
-const LayoutDynamic = dynamic(() => import("@/layout"), { ssr: false });
-export default function Notes({ notes }) {
-    console.log('notes data => ', notes);
+import {
+    Box,
+    Flex,
+    Grid,
+    GridItem,
+    Card,
+    CardBody,
+    CardHeader,
+    CardFooter,
+    Heading,
+    Text,
+    Button,
+} from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
+const LayoutComponent = dynamic(() => import("@/layout"));
+
+export default function Notes() {
+    const router = useRouter();
+    const [notes, setNotes] = useState();
+
+    useEffect(() => {
+        async function fetchingData() {
+            const res = await fetch("https://service.pace-unv.cloud/api/notes");
+            const listNotes = await res.json();
+            setNotes(listNotes);
+        }
+        fetchingData();
+    }, []);
+
     return (
         <>
-            <LayoutDynamic metaTitle={"Notes"} metaDescription={"Notes"} >
-                {
-                    notes.quotes.map((note) => {
-                        return (
-                            <Link href={`/notes/${note.id}`} key={note.id}>
-                                <div className={styles.quote} key={note.id}>
-                                    <h1>&ldquo;{note.quote}&ldquo;</h1>
-                                    <p className={styles.author}>~{note.author}~</p>
-                                </div>
-                            </Link>
-                        )
-                    })
-                }
-            </LayoutDynamic>
+            <LayoutComponent metaTitle="Notes">
+                <Box padding="5">
+                    <Flex justifyContent="end">
+                        <Button
+                            colorScheme="blue"
+                            onClick={() => router.push("/notes/add")}
+                        >
+                            Add Notes
+                        </Button>
+                    </Flex>
+                    <Flex>
+                        <Grid templateColumns="repeat(3, 1fr)" gap={5}>
+                            {notes?.data?.map((item) => (
+                                <GridItem>
+                                    <Card>
+                                        <CardHeader>
+                                            <Heading>{item?.title}</Heading>
+                                        </CardHeader>
+                                        <CardBody>
+                                            <Text>{item?.description}</Text>
+                                        </CardBody>
+                                        <CardFooter justify="space-between" flexWrap="wrap">
+                                            <Button
+                                                onClick={() => router.push(`/notes/edit/${item?.id}`)}
+                                                flex="1"
+                                                variant="ghost"
+                                            >
+                                                Edit
+                                            </Button>
+                                            <Button
+                                                flex="1"
+                                                colorScheme="red"
+                                            >
+                                                Delete
+                                            </Button>
+                                        </CardFooter>
+                                    </Card>
+                                </GridItem>
+                            ))}
+                        </Grid>
+                    </Flex>
+                </Box>
+            </LayoutComponent>
         </>
     );
-}
-
-export async function getStaticProps() {
-    const res = await fetch('https://dummyjson.com/quotes')
-    const notes = await res.json()
-    return { props: { notes }, revalidate: 10 }
-    //revalidate digunakan untuk memperbarui data setiap 10 detik
 }
