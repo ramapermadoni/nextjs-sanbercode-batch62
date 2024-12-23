@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
+import { useEffect } from "react";
 const LayoutComponent = dynamic(() => import("@/layout"));
 
 export default function EditNotes() {

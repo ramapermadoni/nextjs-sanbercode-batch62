@@ -14,11 +14,13 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useQueries } from "@/hooks/useQueries"
 
 const LayoutComponent = dynamic(() => import("@/layout"));
 
 export default function Notes() {
     const router = useRouter();
+    const { data: listNotes } = useQueries({ prefixUrl: "https://service.pace-unv.cloud/api/notes" });
     const [notes, setNotes] = useState();
     const HandleDelete = async (id) => {
         try {
