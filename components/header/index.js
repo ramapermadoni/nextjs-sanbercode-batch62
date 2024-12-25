@@ -7,14 +7,17 @@ import Cookies from "js-cookie";
 import { mutate } from "swr";
 import {useRouter} from "next/router";
 import { useMutation } from "@/hooks/useMutation";
+import { useContext } from "react";
+import { UserContext } from "@/context/userContext";
 
 export default function Header() {
+    const userData = useContext(UserContext);
     const router = useRouter();
     const { mutate } = useMutation();
-    const { data, isLoading, isError } = useQueries({
-        prefixUrl: "https://service.pace-unv.cloud/api/user/me",
-        headers: { Authorization: `Bearer ${Cookies.get("user_token")}` },
-    });
+    // const { data, isLoading, isError } = useQueries({
+    //     prefixUrl: "https://service.pace-unv.cloud/api/user/me",
+    //     headers: { Authorization: `Bearer ${Cookies.get("user_token")}` },
+    // });
 
     const HandleLogout = async () => {
         console.log("Logout");
@@ -38,7 +41,7 @@ export default function Header() {
                 <li>
                     <Menu>
                         <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-                            {data?.data?.name || (isLoading ? "Loading..." : "Guest")}
+                            {userData?.name }
                         </MenuButton>
                         <MenuList>
                             <MenuItem onClick={() => HandleLogout()}>Logout</MenuItem>
@@ -46,7 +49,6 @@ export default function Header() {
                     </Menu>
                 </li>
             </ul>
-            {isError && <p style={{ color: "red" }}>Error loading user data.</p>}
         </div>
     );
 }
