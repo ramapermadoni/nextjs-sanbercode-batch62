@@ -1,17 +1,20 @@
+
 import { useCallback, useEffect, useState } from "react";
 
-export const useQueries = ({ prefixUrl = "" } = {}) => {
+export const useQueries = ({ prefixUrl = "", headers= {} } = {}) => {
     const [data, setData] = useState({
         data: null,
         isLoading: true,
         isError: false,
     });
+    console.log("Headers up => ", headers);
 
     const fetchingData = useCallback(
-        async ({ url = "", method = "GET" } = {}) => {
+        async ({ url = "", method = "GET", headers = {} } = {}) => {
 
+            console.log("headers => ", headers);
             try {
-                const response = awaitfetch(url, { method });
+                const response = await fetch(url, { method, headers });
                 const result = await response.json();
                 setData({
                     ...data,
@@ -29,7 +32,7 @@ export const useQueries = ({ prefixUrl = "" } = {}) => {
 
     useEffect(() => {
         if (prefixUrl) {
-            fetchingData({ url: prefixUrl });
+            fetchingData({ url: prefixUrl, headers:headers });
         }
     }, []);
 

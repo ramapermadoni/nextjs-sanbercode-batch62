@@ -7,12 +7,6 @@ const LayoutDynamic = dynamic(() => import("@/layout"), { ssr: false });
 
 
 export default function Main() {
-  useEffect(() => {
-    fetch("/api/hello")
-      .then((res) => res.json())
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-  }, [])
   return (
     <>
       <LayoutDynamic metaTitle={"Home"} metaDescription={"Ini adalah halaman utama website"}>
